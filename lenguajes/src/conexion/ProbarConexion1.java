@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package conexion;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public class ProbarConexion1 {
@@ -15,9 +11,23 @@ public class ProbarConexion1 {
          con =Conexion.conectarse("root","");
             System.out.println("Te conectaste!");
             //caso especial del select
-            //paso 1 
+            //paso 1 generar una consulta(querry)
             Statement st=con.createStatement();
-            ResultSet rs=st.executeQuery("select * from tablita");
+            ResultSet rs=st.executeQuery("select * from tablita where ID=1");
+            //Result set para mapear
+            //vvine la traduccion
+            ArrayList<Tablita> registros=new ArrayList<>();
+            while(rs.next()){
+                Tablita t=new Tablita();
+                t.setID(rs.getInt(1));
+                t.setNombre(rs.getString(2));
+                registros.add(t);
+            }
+            for(Tablita t:registros){
+                System.out.println("id: "+t.getID()+" Nombre: "+ t.getNombre());
+            }
+            
+            st.close();
             
         }catch(ClassNotFoundException e){
             System.out.println("No se cargo bien el driver");
@@ -30,7 +40,6 @@ public class ProbarConexion1 {
             if(con!=null)con.close();
             System.out.println("Ya se cerro todo");
         } catch (SQLException ex) {
-           
         }
-    } 
+    }
 }
